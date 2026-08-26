@@ -1,0 +1,37 @@
+# Data (trop volumineux pour git — CICIDS2017 fait ~50 Go non compressé)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Modèles entraînés et artefacts d'évaluation
+model_artifacts/*
+!model_artifacts/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+
+# Environnements virtuels
+.venv/
+venv/
+env/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Secrets / config locale
+.env
+*.env.local
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

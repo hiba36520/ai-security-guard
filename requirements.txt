@@ -1,0 +1,21 @@
+# --- Phase 1-2 : Data pipeline + classifieur ---
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+xgboost>=2.0
+pyarrow>=14.0       # lecture/écriture parquet
+shap>=0.44
+matplotlib>=3.7
+
+# --- Contrats de données ---
+pydantic>=2.5
+
+# --- Phase 3 : Guardrail Agent (à activer quand tu commences) ---
+# sentence-transformers>=2.5   # similarité embeddings pour détection
+
+# --- Phase 4 : RAG Threat Intel (à activer quand tu commences) ---
+# qdrant-client>=1.7
+# rank-bm25>=0.2.2             # composante keyword du hybrid search
+
+# --- Tests ---
+pytest>=7.4
