@@ -19,3 +19,4 @@ requests>=2.31
 
 # --- Tests ---
 pytest>=7.4
+joblib>=1.3
