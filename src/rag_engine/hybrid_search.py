@@ -1,19 +1,21 @@
-﻿"""
+"""
 Hybrid search engine for the Agentic RAG Threat Intelligence component.
 
 Combines:
-  - BM25 (keyword/lexical matching) - critical for exact CVE-ID and
+  - BM25 (keyword/lexical matching) — critical for exact CVE-ID and
     ATT&CK-technique-ID matches (e.g. "CVE-2021-44228", "T1059.001"),
     which pure semantic similarity handles poorly.
   - TF-IDF + TruncatedSVD (a lightweight semantic/"dense" signal, i.e.
-    classic Latent Semantic Analysis) - catches queries that are
-    conceptually related but do not share exact vocabulary.
+    classic Latent Semantic Analysis) — catches queries that are
+    conceptually related but don't share exact vocabulary.
 
-Note: a transformer embedding model (e.g. sentence-transformers) would
-normally be used for the semantic component. This project deliberately
-uses TF-IDF+SVD instead to avoid the heavy PyTorch dependency during
-local development. Swapping in a transformer encoder later only requires
-replacing the semantic part - the rest of the hybrid ranking is unaffected.
+Note on the semantic component: a transformer embedding model (e.g.
+sentence-transformers) would normally be used here for stronger semantic
+matching. This project deliberately uses TF-IDF+SVD instead to avoid the
+heavy PyTorch dependency during local development. Swapping in a
+transformer encoder later only requires replacing SemanticIndex — the
+rest of the hybrid ranking logic is unaffected (see architecture.md,
+"clean interface contracts").
 """
 
 import re
@@ -39,7 +41,7 @@ class SearchHit:
 
 
 class HybridSearchEngine:
-    def __init__(self, corpus: list, semantic_components: int = 8, bm25_weight: float = 0.5):
+    def __init__(self, corpus: list, semantic_components: int = 40, bm25_weight: float = 0.5):
         self.corpus = corpus
         self.bm25_weight = bm25_weight
 

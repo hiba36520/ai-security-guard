@@ -1,0 +1,102 @@
+[
+  {
+    "id": "CVE-2021-44228",
+    "source": "CVE",
+    "text": "Log4Shell: remote code execution vulnerability in the Apache Log4j logging library via unsafe JNDI lookups triggered by attacker-controlled input strings, allowing arbitrary code execution on the affected server."
+  },
+  {
+    "id": "CVE-2021-45046",
+    "source": "CVE",
+    "text": "A follow-up flaw to Log4Shell in Apache Log4j: the initial fix was incomplete in certain non-default configurations, still permitting remote code execution or denial-of-service in some deployments."
+  },
+  {
+    "id": "CVE-2017-0144",
+    "source": "CVE",
+    "text": "EternalBlue: remote code execution vulnerability in Microsoft SMBv1 server due to improper handling of crafted packets, widely exploited by the WannaCry and NotPetya ransomware worms."
+  },
+  {
+    "id": "CVE-2014-0160",
+    "source": "CVE",
+    "text": "Heartbleed: out-of-bounds read vulnerability in the OpenSSL TLS heartbeat extension, allowing attackers to read sensitive memory contents including private keys and session data from the server."
+  },
+  {
+    "id": "CVE-2021-34527",
+    "source": "CVE",
+    "text": "PrintNightmare: remote code execution and privilege escalation vulnerability in the Windows Print Spooler service, exploitable via crafted print driver installation requests."
+  },
+  {
+    "id": "CVE-2019-0708",
+    "source": "CVE",
+    "text": "BlueKeep: remote code execution vulnerability in Windows Remote Desktop Services (RDP) that does not require authentication, allowing wormable exploitation across a network."
+  },
+  {
+    "id": "CVE-2014-6271",
+    "source": "CVE",
+    "text": "Shellshock: vulnerability in the GNU Bash shell allowing arbitrary command execution via specially crafted environment variables, widely exploitable through CGI web scripts and DHCP clients."
+  },
+  {
+    "id": "CVE-2017-5638",
+    "source": "CVE",
+    "text": "Remote code execution vulnerability in the Apache Struts2 Jakarta Multipart parser via a crafted Content-Type header, notably exploited in the 2017 Equifax data breach."
+  },
+  {
+    "id": "CVE-2020-1472",
+    "source": "CVE",
+    "text": "Zerologon: privilege escalation vulnerability in the Windows Netlogon protocol allowing an attacker to impersonate a domain controller and take over an entire Active Directory domain."
+  },
+  {
+    "id": "CVE-2021-26855",
+    "source": "CVE",
+    "text": "ProxyLogon: server-side request forgery vulnerability in Microsoft Exchange Server allowing an unauthenticated attacker to bypass authentication and access mailbox data, often chained with further flaws for remote code execution."
+  },
+  {
+    "id": "CVE-2022-30190",
+    "source": "CVE",
+    "text": "Follina: remote code execution vulnerability in the Microsoft Windows Support Diagnostic Tool (MSDT), exploitable via a malicious Office document that does not require macros to be enabled."
+  },
+  {
+    "id": "CVE-2021-3156",
+    "source": "CVE",
+    "text": "Baron Samedit: heap-based buffer overflow vulnerability in Sudo allowing any local user to gain root privileges on Unix-like systems, without requiring authentication."
+  },
+  {
+    "id": "CVE-2019-19781",
+    "source": "CVE",
+    "text": "Path traversal vulnerability in Citrix Application Delivery Controller (ADC) and Gateway allowing unauthenticated remote code execution, widely exploited shortly after disclosure."
+  },
+  {
+    "id": "CVE-2020-0601",
+    "source": "CVE",
+    "text": "CurveBall: spoofing vulnerability in the Windows CryptoAPI's validation of Elliptic Curve Cryptography certificates, allowing an attacker to sign malicious code or intercept TLS connections as if trusted."
+  },
+  {
+    "id": "CVE-2016-5195",
+    "source": "CVE",
+    "text": "Dirty COW: race condition in the Linux kernel's memory subsystem allowing a local unprivileged user to gain write access to read-only memory mappings, leading to privilege escalation."
+  },
+  {
+    "id": "CVE-2018-13379",
+    "source": "CVE",
+    "text": "Path traversal vulnerability in Fortinet FortiOS SSL VPN web portal allowing an unauthenticated attacker to read system files, including session credentials, from the device."
+  },
+  {
+    "id": "CVE-2021-40444",
+    "source": "CVE",
+    "text": "Remote code execution vulnerability in Microsoft MSHTML, exploitable via a malicious ActiveX control embedded in an Office document."
+  },
+  {
+    "id": "CVE-2023-23397",
+    "source": "CVE",
+    "text": "Privilege escalation vulnerability in Microsoft Outlook allowing an attacker to leak a user's NTLM authentication hash by sending a specially crafted email, without requiring the user to open or preview it."
+  },
+  {
+    "id": "CVE-2017-11882",
+    "source": "CVE",
+    "text": "Memory corruption vulnerability in the Microsoft Office Equation Editor component allowing remote code execution via a crafted document, widely used in phishing campaigns for years after disclosure."
+  },
+  {
+    "id": "CVE-2020-0796",
+    "source": "CVE",
+    "text": "SMBGhost: remote code execution vulnerability in the Microsoft SMBv3 protocol's compression handling, allowing wormable exploitation similar to EternalBlue."
+  }
+]

@@ -1,10 +1,10 @@
-﻿"""
+"""
 Orchestrator / correlation layer.
 
 Ties the Guardrail Agent (DetectionEvent) and the network anomaly
 classifier (AnomalyEvent) together with the RAG Threat Intel engine,
 producing a single enriched IncidentAlert per event. This is the
-"correlation layer" from architecture.md - it owns severity scoring and
+"correlation layer" from architecture.md — it owns severity scoring and
 decides when threat-intel enrichment is worth the query.
 """
 
@@ -13,8 +13,8 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
+from src.rag_engine.agent import ThreatIntelAgent
 from src.rag_engine.corpus import THREAT_INTEL_CORPUS
-from src.rag_engine.hybrid_search import HybridSearchEngine
 from src.schemas.events import (
     AnomalyEvent,
     ContextType,
@@ -27,20 +27,23 @@ from src.schemas.events import (
     ThreatIntelResult,
 )
 
+# Anomaly classes considered non-actionable (normal traffic)
 BENIGN_CLASSES = {"BENIGN"}
 
+# Map DetectionType -> a search query fed into the RAG engine
 DETECTION_QUERY_MAP = {
     DetectionType.PROMPT_INJECTION: "prompt injection command and scripting interpreter abuse",
     DetectionType.DATA_EXFILTRATION: "credential leak data exfiltration",
     DetectionType.UNAUTHORIZED_API_CALL: "unauthorized command execution",
 }
 
+# Relevance score threshold below which a RAG hit is not worth attaching
 MIN_RELEVANCE = 0.15
 
 
 class Orchestrator:
     def __init__(self):
-        self._rag = HybridSearchEngine(THREAT_INTEL_CORPUS)
+        self._agent = ThreatIntelAgent(THREAT_INTEL_CORPUS)
 
     def _query_threat_intel(self, triggering_event_id, query_text, context_type):
         query = ThreatIntelQuery(
@@ -48,7 +51,7 @@ class Orchestrator:
             indicators=[query_text],
             context_type=context_type,
         )
-        hits = self._rag.search(query_text, top_k=3)
+        hits = self._agent.investigate(query_text)
         matches = [
             ThreatIntelMatch(source=h.source, id=h.id, relevance_score=min(h.score, 1.0), summary=h.text)
             for h in hits if h.score >= MIN_RELEVANCE
@@ -86,7 +89,7 @@ class Orchestrator:
 
     def handle_anomaly_event(self, event: AnomalyEvent):
         if event.predicted_class in BENIGN_CLASSES:
-            return None
+            return None  # not an incident
 
         query_text = f"{event.predicted_class} network attack"
         threat_result = self._query_threat_intel(event.event_id, query_text, ContextType.NETWORK)

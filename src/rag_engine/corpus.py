@@ -1,102 +1,64 @@
-﻿"""
-Starter Threat Intelligence corpus (CVE + MITRE ATT&CK).
+"""
+Threat Intelligence corpus loader (CVE + MITRE ATT&CK).
 
-This is a small curated set of well-known, stable entries for MVP
-development and demoing the hybrid search engine end-to-end. In a
-production version, this would be replaced/extended by an ingestion
-pipeline pulling the live NVD CVE feed and the MITRE ATT&CK STIX bundle.
+Loads from data/threat_intel/*.json:
+  - mitre_attack.json: 222 real top-level MITRE ATT&CK Enterprise techniques,
+    extracted from the official STIX bundle
+    (https://github.com/mitre-attack/attack-stix-data). This is real,
+    verifiable threat intelligence data, not synthetic examples.
+  - cve_data.json: a curated set of well-documented, high-profile CVEs.
+    This is a static curated snapshot, not a live feed from the NVD API —
+    see ingest.py for the pattern that would replace this with a live
+    pull in a production deployment.
+
+Falls back to a small embedded starter set if the data files are missing,
+so the rest of the system still runs in a fresh checkout before the data
+files are fetched/generated.
 """
 
-THREAT_INTEL_CORPUS = [
+import json
+import os
+
+_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "data", "threat_intel")
+
+_FALLBACK_CORPUS = [
     {
         "id": "CVE-2021-44228",
         "source": "CVE",
         "text": "Log4Shell: remote code execution vulnerability in the Apache Log4j "
-                "logging library via unsafe JNDI lookups triggered by attacker-controlled "
-                "input strings, allowing arbitrary code execution on the affected server.",
-    },
-    {
-        "id": "CVE-2017-0144",
-        "source": "CVE",
-        "text": "EternalBlue: remote code execution vulnerability in Microsoft SMBv1 "
-                "server due to improper handling of crafted packets, widely exploited by "
-                "the WannaCry and NotPetya ransomware worms.",
-    },
-    {
-        "id": "CVE-2014-0160",
-        "source": "CVE",
-        "text": "Heartbleed: out-of-bounds read vulnerability in the OpenSSL TLS "
-                "heartbeat extension, allowing attackers to read sensitive memory "
-                "contents including private keys and session data from the server.",
-    },
-    {
-        "id": "CVE-2021-34527",
-        "source": "CVE",
-        "text": "PrintNightmare: remote code execution and privilege escalation "
-                "vulnerability in the Windows Print Spooler service, exploitable via "
-                "crafted print driver installation requests.",
-    },
-    {
-        "id": "CVE-2019-0708",
-        "source": "CVE",
-        "text": "BlueKeep: remote code execution vulnerability in Windows Remote "
-                "Desktop Services (RDP) that does not require authentication, allowing "
-                "wormable exploitation across a network.",
+                "logging library via unsafe JNDI lookups.",
     },
     {
         "id": "T1059",
         "source": "MITRE_ATTACK",
         "text": "Command and Scripting Interpreter: adversaries abuse command and "
-                "script interpreters (PowerShell, cmd, bash, Python) to execute commands, "
-                "scripts, or binaries during post-exploitation activity.",
-    },
-    {
-        "id": "T1071",
-        "source": "MITRE_ATTACK",
-        "text": "Application Layer Protocol: adversaries communicate using application "
-                "layer protocols (HTTP, DNS, HTTPS) to blend command-and-control traffic "
-                "with legitimate network traffic and avoid detection.",
-    },
-    {
-        "id": "T1055",
-        "source": "MITRE_ATTACK",
-        "text": "Process Injection: adversaries inject code into the address space of "
-                "another running process to evade process-based defenses and elevate "
-                "privileges.",
-    },
-    {
-        "id": "T1003",
-        "source": "MITRE_ATTACK",
-        "text": "OS Credential Dumping: adversaries attempt to dump credentials from "
-                "operating system memory, registry, or files to obtain account login "
-                "information for lateral movement.",
-    },
-    {
-        "id": "T1190",
-        "source": "MITRE_ATTACK",
-        "text": "Exploit Public-Facing Application: adversaries exploit a weakness in an "
-                "internet-facing application (web server, database) to gain initial "
-                "access to a network.",
-    },
-    {
-        "id": "T1071.001",
-        "source": "MITRE_ATTACK",
-        "text": "Web Protocols: a sub-technique of Application Layer Protocol where "
-                "adversaries specifically use HTTP or HTTPS to communicate with "
-                "command-and-control infrastructure.",
-    },
-    {
-        "id": "T1046",
-        "source": "MITRE_ATTACK",
-        "text": "Network Service Discovery: adversaries scan a network to gather "
-                "information about running services, often as reconnaissance before "
-                "exploitation (related to port scanning activity).",
-    },
-    {
-        "id": "T1498",
-        "source": "MITRE_ATTACK",
-        "text": "Network Denial of Service: adversaries flood a target network or "
-                "service with traffic to degrade or deny availability to legitimate "
-                "users, covering volumetric DDoS attacks.",
+                "script interpreters to execute commands during post-exploitation.",
     },
 ]
+
+
+def _load_json(filename):
+    path = os.path.join(_DATA_DIR, filename)
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def load_corpus():
+    mitre = _load_json("mitre_attack.json")
+    cve = _load_json("cve_data.json")
+
+    if mitre is None and cve is None:
+        return _FALLBACK_CORPUS
+
+    corpus = []
+    if cve:
+        corpus.extend(cve)
+    if mitre:
+        corpus.extend(mitre)
+    return corpus
+
+
+THREAT_INTEL_CORPUS = load_corpus()
+

@@ -10,12 +10,12 @@ matplotlib>=3.7
 # --- Contrats de données ---
 pydantic>=2.5
 
-# --- Phase 3 : Guardrail Agent (à activer quand tu commences) ---
-# sentence-transformers>=2.5   # similarité embeddings pour détection
+# --- Phase 3 : Guardrail Agent ---
+# sentence-transformers>=2.5   # non utilisé (voir hybrid_search.py: TF-IDF+SVD à la place)
 
-# --- Phase 4 : RAG Threat Intel (à activer quand tu commences) ---
-# qdrant-client>=1.7
-# rank-bm25>=0.2.2             # composante keyword du hybrid search
+# --- Phase 4 : RAG Threat Intel ---
+rank-bm25>=0.2.2
+requests>=2.31
 
 # --- Tests ---
 pytest>=7.4

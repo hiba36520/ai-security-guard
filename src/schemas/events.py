@@ -9,7 +9,7 @@ autres — c'est le point que Dr. Pavlović a souligné.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 from uuid import uuid4
@@ -40,7 +40,7 @@ class DetectionEvent(BaseModel):
 
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     source: str = "guardrail_agent"
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     detection_type: DetectionType
     confidence: float = Field(ge=0.0, le=1.0)
     raw_input_excerpt: Optional[str] = None
@@ -54,7 +54,7 @@ class AnomalyEvent(BaseModel):
 
     event_id: str = Field(default_factory=lambda: str(uuid4()))
     source: str = "network_classifier"
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     predicted_class: str
     confidence: float = Field(ge=0.0, le=1.0)
     src_ip: Optional[str] = None
@@ -93,4 +93,4 @@ class IncidentAlert(BaseModel):
     event_ids: list[str]
     threat_intel: list[ThreatIntelResult] = Field(default_factory=list)
     recommended_action: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
